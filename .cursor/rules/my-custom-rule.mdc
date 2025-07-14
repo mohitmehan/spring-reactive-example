@@ -1,0 +1,5 @@
+---
+description: use this rule for spring reactive example
+alwaysApply: false
+---
+For this Spring reactive project always Follow Domain Driven Design Appoach and try to Follow the TDD Approach
