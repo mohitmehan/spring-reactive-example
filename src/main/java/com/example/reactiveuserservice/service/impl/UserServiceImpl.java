@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
                     existingUser.setLastName(userDto.getLastName());
                     existingUser.setPhone(userDto.getPhone());
                     existingUser.setActive(userDto.isActive());
+                    existingUser.setSalary(userDto.getSalary());
                     
                     // Check if email is being changed
                     if (!existingUser.getEmail().equals(userDto.getEmail())) {
@@ -83,6 +85,24 @@ public class UserServiceImpl implements UserService {
                 .switchIfEmpty(Mono.error(new RuntimeException("User not found with email: " + email)));
     }
 
+    @Override
+    public Flux<UserDto> getUsersByNameAndSalary(String name, BigDecimal salary) {
+        // Search by both first name and last name with the given salary
+        Flux<User> firstNameResults = userRepository.findByFirstNameContainingIgnoreCaseAndSalary(name, salary);
+        Flux<User> lastNameResults = userRepository.findByLastNameContainingIgnoreCaseAndSalary(name, salary);
+        
+        return Flux.concat(firstNameResults, lastNameResults)
+                .distinct(User::getId) // Remove duplicates based on ID
+                .map(this::mapToDto);
+    }
+
+    @Override
+    public Mono<UserDto> getUserByIdAndEmail(String id, String email) {
+        return userRepository.findByIdAndEmail(id, email)
+                .map(this::mapToDto)
+                .switchIfEmpty(Mono.error(new RuntimeException("User not found with id: " + id + " and email: " + email)));
+    }
+
     private User mapToEntity(UserDto userDto) {
         return User.builder()
                 .id(userDto.getId())
@@ -91,6 +111,7 @@ public class UserServiceImpl implements UserService {
                 .email(userDto.getEmail())
                 .phone(userDto.getPhone())
                 .active(userDto.isActive())
+                .salary(userDto.getSalary())
                 .build();
     }
 
@@ -102,6 +123,7 @@ public class UserServiceImpl implements UserService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .active(user.isActive())
+                .salary(user.getSalary())
                 .build();
     }
 

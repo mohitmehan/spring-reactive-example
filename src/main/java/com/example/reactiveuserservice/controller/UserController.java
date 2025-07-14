@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/users")
@@ -56,5 +57,19 @@ public class UserController {
     @GetMapping("/email/{email}")
     public Mono<UserDto> getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
+    }
+
+    @GetMapping("/search")
+    public Flux<UserDto> getUsersByNameAndSalary(
+            @RequestParam String name,
+            @RequestParam BigDecimal salary) {
+        return userService.getUsersByNameAndSalary(name, salary);
+    }
+
+    @GetMapping("/{id}/email/{email}")
+    public Mono<UserDto> getUserByIdAndEmail(
+            @PathVariable String id,
+            @PathVariable String email) {
+        return userService.getUserByIdAndEmail(id, email);
     }
 } 

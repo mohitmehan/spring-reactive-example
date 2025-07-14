@@ -46,6 +46,8 @@ The application will start on port 8080.
 - **PUT /api/users/{id}** - Update an existing user
 - **DELETE /api/users/{id}** - Delete a user
 - **GET /api/users/email/{email}** - Get user by email
+- **GET /api/users/search?name={name}&salary={salary}** - Get users by name and salary
+- **GET /api/users/{id}/email/{email}** - Get user by ID and email
 
 ### Functional Endpoints (v2)
 
@@ -64,6 +66,7 @@ The application will start on port 8080.
   "lastName": "Doe",
   "email": "john.doe@example.com",
   "phone": "1234567890",
-  "active": true
+  "active": true,
+  "salary": 75000.00
 }
 ``` 

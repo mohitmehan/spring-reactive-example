@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.DecimalMin;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -36,4 +38,7 @@ public class User {
     private String phone;
     
     private boolean active = true;
+    
+    @DecimalMin(value = "0.0", inclusive = false, message = "Salary must be greater than 0")
+    private BigDecimal salary;
 } 

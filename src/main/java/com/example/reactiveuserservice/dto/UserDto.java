@@ -3,10 +3,12 @@ package com.example.reactiveuserservice.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -31,4 +33,7 @@ public class UserDto {
     private String phone;
     
     private boolean active = true;
+    
+    @DecimalMin(value = "0.0", inclusive = false, message = "Salary must be greater than 0")
+    private BigDecimal salary;
 } 
